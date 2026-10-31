@@ -5,8 +5,8 @@ This section describes the hardware connections required between the **Arduino U
 
 | **UNO Header Pin** | **LIN Add-on Board** | **Description**       |
 | ------------------ | -------------------- | --------------------- |
-| D1                 | RX                   | MCU TX → LIN Annex RX |
-| D0                 | TX                   | LIN Annex TX → MCU RX |
+| D1                 | TX                   | MCU TX → LIN Board TX |
+| D0                 | RX                   | LIN Board RX → MCU RX |
 
 ## `printf` Connection
 
