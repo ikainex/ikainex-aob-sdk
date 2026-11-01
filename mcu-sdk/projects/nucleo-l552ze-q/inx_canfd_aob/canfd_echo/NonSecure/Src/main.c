@@ -67,12 +67,12 @@ static void MX_LPUART1_UART_Init(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 // FDCAN2 Callback
-void HAL_FDCAN_RxFifo1Callback(FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo1ITs)
+void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo0ITs)
 {
-  if((RxFifo1ITs & FDCAN_IT_RX_FIFO1_NEW_MESSAGE) != RESET)
+  if((RxFifo0ITs & FDCAN_IT_RX_FIFO0_NEW_MESSAGE) != RESET)
   {
     /* Retreive Rx messages from RX FIFO1 */
-    if (HAL_FDCAN_GetRxMessage(hfdcan, FDCAN_RX_FIFO1, &RxHeader, RxData) != HAL_OK)
+    if (HAL_FDCAN_GetRxMessage(hfdcan, FDCAN_RX_FIFO0, &RxHeader, RxData) != HAL_OK)
     {
     /* Reception Error */
     Error_Handler();
@@ -83,7 +83,11 @@ void HAL_FDCAN_RxFifo1Callback(FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo1ITs)
       /* Notification Error */
       Error_Handler();
     }
-
+    printf("Rx Id=0x%lx DLC=%lu {",RxHeader.Identifier, RxHeader.DataLength);
+    for (uint8_t i = 0; i < 12 ; i++) {
+	  printf(" 0x%x",RxData[i]);
+	}
+	printf(" }\r\n\n");
     /* Echo the received Data */
     for (int i=0; i<12; i++)
     {
@@ -94,6 +98,11 @@ void HAL_FDCAN_RxFifo1Callback(FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo1ITs)
 	{
 	  Error_Handler();
 	}
+    printf("Tx Id=0x%lx DLC=%lu {", TxHeader.Identifier, TxHeader.DataLength);
+    for (uint8_t i = 0; i < 12 ; i++) {
+	  printf(" 0x%x",TxData[i]);
+	}
+	printf(" }\r\n\n");
   }
 }
 /* USER CODE END 0 */
@@ -131,9 +140,9 @@ int main(void)
   MX_LPUART1_UART_Init();
   /* USER CODE BEGIN 2 */
 
-  //inx_uart_printf_init(&hlpuart1);
+  inx_uart_printf_init(&hlpuart1);
 
-  //printf("STM32L562 FDCAN Start\r\n");
+  printf("NUCLEO-L552ZE-Q FDCAN Start...\r\n");
 
   // STart FDCAN1
   if(HAL_FDCAN_Start(&hfdcan1)!= HAL_OK)
@@ -265,7 +274,7 @@ static void MX_FDCAN1_Init(void)
   sFilterConfig.IdType = FDCAN_STANDARD_ID;
   sFilterConfig.FilterIndex = 0;
   sFilterConfig.FilterType = FDCAN_FILTER_MASK;
-  sFilterConfig.FilterConfig = FDCAN_FILTER_TO_RXFIFO1;
+  sFilterConfig.FilterConfig = FDCAN_FILTER_TO_RXFIFO0;
   sFilterConfig.FilterID1 = 0x11;
   sFilterConfig.FilterID2 = 0x11;
   if (HAL_FDCAN_ConfigFilter(&hfdcan1, &sFilterConfig) != HAL_OK)
