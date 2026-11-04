@@ -32,9 +32,9 @@
 	</natures>
 	<linkedResources>
 		<link>
-			<name>utility</name>
-			<type>2</type>
-			<location>C:/Users/kunch/kc/ikainex/working/aob/issues/17-fix-directory-structure/mcu-sdk/utility/serial_print</location>
+			<name>Utility/inx_uart_printf_stm32.c</name>
+			<type>1</type>
+			<locationURI>PARENT-6-PROJECT_LOC/utility/serial_print/inx_uart_printf_stm32.c</locationURI>
 		</link>
 		<link>
 			<name>Application/User/main.c</name>

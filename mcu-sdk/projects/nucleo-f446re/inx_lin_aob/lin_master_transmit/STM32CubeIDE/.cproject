@@ -91,8 +91,6 @@
 					</fileInfo>
 					<sourceEntries>
 						<entry excluding="utility|middlewares" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
-						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="middlewares"/>
-						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="utility"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>

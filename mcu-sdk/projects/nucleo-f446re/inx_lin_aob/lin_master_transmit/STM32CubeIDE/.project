@@ -36,22 +36,12 @@
 			<locationURI>PARENT-1-PROJECT_LOC/lin_master_transmit.ioc</locationURI>
 		</link>
 		<link>
-			<name>middlewares</name>
-			<type>2</type>
-			<location>C:/Users/kunch/kc/ikainex/working/aob/issues/17-fix-directory-structure/mcu-sdk/middlewares/stm32/inx_lin</location>
-		</link>
-		<link>
-			<name>utility</name>
-			<type>2</type>
-			<location>C:/Users/kunch/kc/ikainex/working/aob/issues/17-fix-directory-structure/mcu-sdk/utility/serial_print</location>
-		</link>
-		<link>
-			<name>middlewares/inx_mcp2003b.c</name>
+			<name>Middlewares/inx_mcp2003b.c</name>
 			<type>1</type>
 			<locationURI>PARENT-5-PROJECT_LOC/middlewares/stm32/inx_lin/inx_mcp2003b.c</locationURI>
 		</link>
 		<link>
-			<name>utility/inx_uart_printf_stm32.c</name>
+			<name>Utility/inx_uart_printf_stm32.c</name>
 			<type>1</type>
 			<locationURI>PARENT-5-PROJECT_LOC/utility/serial_print/inx_uart_printf_stm32.c</locationURI>
 		</link>

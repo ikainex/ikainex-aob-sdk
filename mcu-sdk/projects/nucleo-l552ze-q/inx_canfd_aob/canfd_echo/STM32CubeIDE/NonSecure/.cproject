@@ -50,7 +50,7 @@
 									<listOptionValue builtIn="false" value="../../../../../../../drivers/STM32Cube_FW_L5_V1.6.0/Drivers/STM32L5xx_HAL_Driver/Inc/Legacy"/>
 									<listOptionValue builtIn="false" value="../../../../../../../drivers/STM32Cube_FW_L5_V1.6.0/Drivers/CMSIS/Device/ST/STM32L5xx/Include"/>
 									<listOptionValue builtIn="false" value="../../../../../../../drivers/STM32Cube_FW_L5_V1.6.0/Drivers/CMSIS/Include"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/utility/inc}&quot;"/>
+									<listOptionValue builtIn="false" value="../../../../../../../utility/serial_print/inc"/>
 								</option>
 								<inputType id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.input.c.1642881108" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.input.c"/>
 							</tool>
@@ -81,7 +81,6 @@
 					</folderInfo>
 					<sourceEntries>
 						<entry excluding="utility" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
-						<entry flags="VALUE_WORKSPACE_PATH" kind="sourcePath" name="utility"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
