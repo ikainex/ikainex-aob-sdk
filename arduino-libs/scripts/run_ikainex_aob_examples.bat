@@ -15,10 +15,10 @@ setlocal EnableExtensions EnableDelayedExpansion
 ::    <SDK_ROOT>\<aob-board>\examples\<example>\<example>.ino
 ::
 ::  Examples:
-::    run_ikainex_aob_examples.bat --aob lin_board --example lin_master_example --com COM3
-::    run_ikainex_aob_examples.bat --aob adc_board --example adc_example --arduino-board mega --com COM5
-::    run_ikainex_aob_examples.bat --aob lin_board --example lin_master_example --build-only
-::    run_ikainex_aob_examples.bat clean --aob lin_board --example lin_master_example
+::    run_ikainex_aob_examples.bat --aob inx_lin_aob --example lin_master_transmit --com COM3
+::    run_ikainex_aob_examples.bat --aob inx_adc_aob --example adc_monitor --arduino-board mega --com COM5
+::    run_ikainex_aob_examples.bat --aob inx_lin_aob --example lin_master_transmit --build-only
+::    run_ikainex_aob_examples.bat clean --aob inx_lin_aob --example lin_master_transmit
 :: ============================================================
 
 :: ── Anchor everything to the script location ─────────────────
@@ -39,7 +39,7 @@ set "ARDUINO_CLI=arduino-cli"
 ::  SECTION 2: Defaults
 :: ------------------------------------------------------------
 
-set "AOB=lin_board"
+set "AOB=inx_lin_aob"
 set "ARDUINO_BOARD=uno"
 set "FQBN=arduino:avr:uno"
 set "PORT=COM15"
@@ -137,7 +137,7 @@ if /I "%ARDUINO_BOARD%"=="rpipico"      set "FQBN=rp2040:rp2040:rpipico"
 
 if not defined EXAMPLE_NAME (
     echo [ERROR] --example is required.
-    echo         Example: --example lin_master_example
+    echo         Example: --example lin_master_transmit
     goto usage
 )
 
@@ -278,7 +278,7 @@ exit /b 1
 :usage
 echo.
 echo Usage:
-echo   run_ikainex_aob_examples.bat [clean] --aob ^<lin_board^|adc_board^|...^> --example ^<example_name^> ^^
+echo   run_ikainex_aob_examples.bat [clean] --aob ^<inx_lin_aob^|inx_adc_aob^|...^> --example ^<example_name^> ^^
 echo                      [--arduino-board ^<uno^|mega^|nano^|esp32^|...^|full-fqbn^>] ^^
 echo                      [--com ^<COMx^>] [--build-only]
 echo.
@@ -290,9 +290,9 @@ echo         ^<aob^>\examples\^<example^>\^<example^>.ino
 echo   - Defaults: --arduino-board uno, --com COM15
 echo.
 echo Examples:
-echo   run_ikainex_aob_examples.bat --aob lin_board --example lin_master_example --com COM3
-echo   run_ikainex_aob_examples.bat --aob adc_board --example adc_example --arduino-board mega --com COM5
-echo   run_ikainex_aob_examples.bat --aob lin_board --example lin_master_example --build-only
-echo   run_ikainex_aob_examples.bat clean --aob lin_board --example lin_master_example
+echo   run_ikainex_aob_examples.bat --aob inx_lin_aob --example lin_master_transmit --com COM3
+echo   run_ikainex_aob_examples.bat --aob inx_adc_aob --example adc_monitor --arduino-board mega --com COM5
+echo   run_ikainex_aob_examples.bat --aob inx_lin_aob --example lin_master_transmit --build-only
+echo   run_ikainex_aob_examples.bat clean --aob inx_lin_aob --example lin_master_transmit
 echo.
 exit /b 0

@@ -10,13 +10,13 @@
  * - LIN transceiver connected to TX/RX
  */
 
-#include <LinBoard.h>
+#include <InxMcp2003b.h>
 #include <SoftwareSerial.h>
 
 SoftwareSerial linBoardSerial(10, 11); // RX, TX -> For prints
 
 // Create LIN slave instance with Serial, tx pin 1, break width 13 bits
-InxLinBoard lin(Serial, 1, 0, 13);
+InxMcp2003b lin(Serial, 1, 0, 13);
 
 // Message ID used by the master example
 #define MSG_COMMAND 0x17U
@@ -30,7 +30,7 @@ void setup() {
 
     linBoardSerial.println("Lin Responder Start");
     uint16_t status = lin.beginSlave(10000);
-    if (status != INX_LIN_BOARD_STATUS_OK) {
+    if (status != INX_MCP2003B_STATUS_OK) {
         linBoardSerial.println("Lin Init Failed");
     }
 
@@ -38,10 +38,10 @@ void setup() {
 }
 
 void loop() {
-    Inx_Lin_Board_Msg msg;
+    Inx_Mcp2003b_Msg msg;
     uint16_t result = lin.readMessageWait(&msg, 8, 2000);
 
-    if (result == INX_LIN_BOARD_STATUS_OK && msg.id == MSG_COMMAND && msg.length == sizeof(expected_data)) {
+    if (result == INX_MCP2003B_STATUS_OK && msg.id == MSG_COMMAND && msg.length == sizeof(expected_data)) {
         bool match = true;
         for (uint8_t i = 0; i < msg.length; ++i) {
             if (msg.data[i] != expected_data[i]) {

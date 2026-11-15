@@ -10,10 +10,10 @@
  * - Reference Voltage: 5V
  */
 
-#include <AdcBoard.h>
+#include <InxMcp3204.h>
 
 // Create ADC instance with CS pin 10, 5V reference voltage, 2MHz SPI frequency
-InxAdcBoard adc(10, INX_ADC_BOARD_VREF_5000MV, 2000000);
+InxMcp3204 adc(10, INX_MCP3204_VREF_5000MV, 2000000);
 
 void setup() {
     // Initialize Serial for debugging output
@@ -23,7 +23,7 @@ void setup() {
     Serial.println("ADC Add-on Board Example Starting...");
     
     // Initialize the ADC driver
-    Inx_Adc_Board_Status status = adc.begin();
+    Inx_Mcp3204_Status status = adc.begin();
     if (status != INX_STATUS_OK) {
         Serial.println("ERROR: Failed to initialize ADC!");
         while (1);  // Halt
@@ -39,7 +39,7 @@ void setup() {
 void loop() {
     uint16_t raw_value = 0;
     uint16_t voltage_mv = 0;
-    Inx_Adc_Board_Status status;
+    Inx_Mcp3204_Status status;
     
     // Print header
     Serial.println("+--------+-------+----------+");
@@ -47,9 +47,9 @@ void loop() {
     Serial.println("+--------+-------+----------+");
     
     // Read all single-ended channels
-    for (int ch = INX_ADC_BOARD_CH0; ch <= INX_ADC_BOARD_CH3; ch++) {
+    for (int ch = INX_MCP3204_CH0; ch <= INX_MCP3204_CH3; ch++) {
         // Read raw ADC value
-        status = adc.readRaw((Inx_Adc_Board_Ch)ch, &raw_value);
+        status = adc.readRaw((Inx_Mcp3204_Ch)ch, &raw_value);
         if (status != INX_STATUS_OK) {
             Serial.print("CH");
             Serial.print(ch);
@@ -58,7 +58,7 @@ void loop() {
         }
         
         // Read voltage in millivolts
-        status = adc.readVoltage((Inx_Adc_Board_Ch)ch, &voltage_mv);
+        status = adc.readVoltage((Inx_Mcp3204_Ch)ch, &voltage_mv);
         if (status != INX_STATUS_OK) {
             Serial.print("CH");
             Serial.print(ch);
@@ -85,25 +85,25 @@ void loop() {
     Serial.println("+----------+----------+");
     
     // CH0 - CH1
-    status = adc.readDifferentialVoltage(INX_ADC_BOARD_DIFF_CH01, &voltage_mv);
+    status = adc.readDifferentialVoltage(INX_MCP3204_DIFF_CH01, &voltage_mv);
     Serial.print("| DIFF_0_1 | ");
     Serial.print(voltage_mv);
     Serial.println(" mV |");
     
     // CH1 - CH0
-    status = adc.readDifferentialVoltage(INX_ADC_BOARD_DIFF_CH10, &voltage_mv);
+    status = adc.readDifferentialVoltage(INX_MCP3204_DIFF_CH10, &voltage_mv);
     Serial.print("| DIFF_1_0 | ");
     Serial.print(voltage_mv);
     Serial.println(" mV |");
     
     // CH2 - CH3
-    status = adc.readDifferentialVoltage(INX_ADC_BOARD_DIFF_CH23, &voltage_mv);
+    status = adc.readDifferentialVoltage(INX_MCP3204_DIFF_CH23, &voltage_mv);
     Serial.print("| DIFF_2_3 | ");
     Serial.print(voltage_mv);
     Serial.println(" mV |");
     
     // CH3 - CH2
-    status = adc.readDifferentialVoltage(INX_ADC_BOARD_DIFF_CH32, &voltage_mv);
+    status = adc.readDifferentialVoltage(INX_MCP3204_DIFF_CH32, &voltage_mv);
     Serial.print("| DIFF_3_2 | ");
     Serial.print(voltage_mv);
     Serial.println(" mV |");

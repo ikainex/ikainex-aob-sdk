@@ -18,14 +18,14 @@
  * Note: Connect a LIN slave device or another Arduino in slave mode
  */
 
-#include <LinBoard.h>
+#include <InxMcp2003b.h>
 
 #include <SoftwareSerial.h>
 
 SoftwareSerial linBoardSerial(10, 11); // RX, TX -> For prints
 
 // Create LIN master instance with Serial, tx pin 1, break width 13 bits
-InxLinBoard lin(Serial, 1, 0, 13);
+InxMcp2003b lin(Serial, 1, 0, 13);
 
 // Message IDs used in this example
 #define MSG_COMMAND     0x17U  // Master sends commands
@@ -40,7 +40,7 @@ void setup() {
     digitalWrite(EN_PIN, HIGH);
     linBoardSerial.println("Lin Commander Start");
     uint16_t status = lin.beginMaster(10000);
-    if (status != INX_LIN_BOARD_STATUS_OK) {
+    if (status != INX_MCP2003B_STATUS_OK) {
         while (1);  // Halt on initialization failure
     }
 
@@ -72,7 +72,7 @@ void sendCommand() {
     uint8_t dlc = sizeof(cmd_data);
     uint16_t result = lin.writeMessage(MSG_COMMAND, cmd_data, dlc);
 
-    if (result != INX_LIN_BOARD_STATUS_OK) {
+    if (result != INX_MCP2003B_STATUS_OK) {
         linBoardSerial.println("Lin write message failed");
     }
     linBoardSerial.print("Sent Data: ");
@@ -94,15 +94,15 @@ void sendCommand() {
 void requestStatus() {
     // Send request header
     uint16_t result = lin.requestMessage(MSG_STATUS);
-    if (result != INX_LIN_BOARD_STATUS_OK) {
+    if (result != INX_MCP2003B_STATUS_OK) {
         return;
     }
 
     // Wait for slave response
-    Inx_Lin_Board_Msg msg;
+    Inx_Mcp2003b_Msg msg;
     result = lin.readMessageWait(&msg, 100);  // 100ms timeout
 
-    if (result == INX_LIN_BOARD_STATUS_OK) {
+    if (result == INX_MCP2003B_STATUS_OK) {
         /* TODO: User can do application specific handling */
     }
 }
@@ -121,7 +121,7 @@ void sendControl() {
 
     uint16_t result = lin.writeMessage(MSG_CONTROL, ctrl_data, sizeof(ctrl_data));
 
-    if (result != INX_LIN_BOARD_STATUS_OK) {
+    if (result != INX_MCP2003B_STATUS_OK) {
         // Handle transmit failure silently to avoid interfering with LIN timing.
     }
 }
