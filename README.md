@@ -1,43 +1,42 @@
-# ikainex-aob-sdk — Ikainex Add-on Board SDK
+# ikainex-aob-sdk - Ikainex Add-on Board SDK
 
-Comprehensive cross-platform SDK for **Ikainex Add-on Boards**. This repository contains:
-- **MCU SDK** — Portable C firmware for embedded systems (STM32, NXP, etc.)
+SDK and examples for **Ikainex Add-on Boards**. This repository contains:
+- **MCU SDK** — STM32 middleware and Nucleo sample projects
 - **Arduino Libraries** — Ready-to-use Arduino libraries with examples
 - **MicroPython Support** — Python integration for Inx boards
 
 ## Quick Links
 
 - 📖 **[MCU SDK Documentation](mcu-sdk/README.md)** — C/C++ SDK details
-- 🔧 **[Arduino Libraries](arduino-libs/README.md)** — Arduino integration guide
+- 🔧 **[Arduino Libraries](arduino-libs/Readme.md)** — Arduino integration guide
 - 🐍 **[MicroPython Support](micropython/Readme.md)** — MicroPython module guide
 
 ## Project Structure
 
 ```
 ikainex-aob-sdk/
-├── mcu-sdk/              # Portable C SDK for Ikainex Add-on boards
-│   ├── include/          # Public APIs (board-level and HAL interfaces)
-│   ├── drivers/          # Board driver implementations (vendor-agnostic)
-│   ├── hal/              # Hardware Abstraction Layer (vendor-specific)
-│   ├── modules/          # vendor-specific Modules
-│   ├── samples/          # Example applications
-│   ├── scripts/          # Build and distribution scripts
-│   └── utility/          # Shared utilities (printf, logging, etc.)
+├── mcu-sdk/              # STM32 SDK, middleware, and sample projects
+│   ├── doc/              # Toolchain integration guides
+│   ├── drivers/          # Vendored STM32Cube F4 and L5 packages
+│   ├── middlewares/      # STM32 MCP3204 ADC and MCP2003B LIN drivers
+│   ├── projects/         # Nucleo board applications
+│   ├── scripts/          # Setup and distribution scripts
+│   └── utility/          # Shared utilities
 ├── arduino-libs/         # Arduino libraries for Inx boards
-│   ├── adc_board/        # ADC Add-on Board library
-│   ├── lin_board/        # LIN Add-on Board library
+│   ├── inx_adc_aob/      # ADC Add-on Board library
+│   ├── inx_lin_aob/      # LIN Add-on Board library
 │   └── scripts/          # Build/flash helper scripts
 ├── micropython/          # MicroPython module support
-└── Readme                # This file
+└── README.md             # This file
 ```
 
 ## Supported Platforms
 
 ### MCU SDK
-| Vendor | Target Board | Status |
-|--------|--------------|--------|
-| STM32  | Nucleo-F446RE | ✅ Primary / Tested |
-| NXP    | (Template)   | 🔄 Porting skeleton |
+| Vendor | Target Board | Current examples |
+|--------|--------------|------------------|
+| STM32  | Nucleo-F446RE | MCP3204 ADC monitor and MCP2003B LIN master |
+| STM32  | Nucleo-L552ZE-Q | Cortex-M33 TrustZone Secure/NonSecure CAN FD echo project |
 
 ### Arduino
 - AVR (Uno, Nano, Mega)
@@ -48,68 +47,65 @@ ikainex-aob-sdk/
 
 ## Supported Modules
 
-| Module | API | Driver | Arduino | MicroPython | Status |
-|--------|-----|--------|---------|-------------|--------|
-| **ADC** | `adc_board.h` | `adc_board.c` | ✅ AdcBoard | 🔄 Planned | ✅ Available |
-| **LIN** | `lin_board.h` | `lin_board.c` | ✅ InxLinBoard | 🔄 Planned | ✅ Available |
-| **CANFD** | `canfd_board.h` | `canfd_board.c` | ❌ Planned | ❌ Planned | ⏳ Planned |
-| **Motor Driver** | `motordriver_board.h` | `motordriver_board.c` | ❌ Planned | ❌ Planned | ⏳ Planned |
+| Module | MCU SDK | Arduino | MicroPython | Availability |
+|--------|---------|---------|-------------|--------------|
+| **ADC** | MCP3204 middleware | `InxMcp3204` | Planned | Available |
+| **LIN** | MCP2003B middleware | `InxMcp2003b` | Planned | Available |
+| **CANFD** | Nucleo-L552ZE-Q sample project | Planned | Planned | Sample project |
+| **Motor Driver** | Planned | Planned | Planned | Planned |
 
 ## Getting Started
 
 ### For MCU SDK (C/C++)
-1. See [MCU SDK README](mcu-sdk/README.md) for detailed setup
-2. Choose your toolchain: Keil, IAR, or CMake
-3. Follow the integration guide in `mcu-sdk/doc/`
+1. See [MCU SDK README](mcu-sdk/README.md) for the current targets and layout.
+2. Open a Nucleo sample project under `mcu-sdk/projects/` in STM32CubeIDE, or
+   follow the applicable guide in `mcu-sdk/doc/`.
 
 ### For Arduino
 ```bash
-# Install via Arduino Library Manager
-# Search for "Ikainex" and install each board library
-
-# Or use arduino-cli
-arduino-cli lib search ADC Add-on Board
-arduino-cli lib install "ADC Add-on Board"
+# From the repository root, compile an example:
+arduino-cli compile --fqbn arduino:avr:uno --libraries arduino-libs \
+  arduino-libs/inx_adc_aob/examples/adc_monitor/adc_monitor.ino
 ```
 
-See [Arduino Libraries README](arduino-libs/README.md) for examples.
+See [Arduino Libraries README](arduino-libs/Readme.md) for examples.
 
 ### For MicroPython
-See [MicroPython README](micropython/Readme.md) for setup instructions (TBD).
+MicroPython board drivers are planned but not yet implemented. See
+[MicroPython README](micropython/Readme.md) for the current status.
 
 ## Naming Conventions
 
 This project uses **consistent, hierarchical naming** across all implementations:
 
 ### C/C++ Code
-- **Header Guards**: `INX_<MODULE>_H` (e.g., `INX_ADC_BOARD_H`)
-- **Macros**: `INX_<MODULE>_<CONSTANT>` (e.g., `INX_ADC_BOARD_VREF_3300MV`)
-- **Functions**: `inx_<module>_<action>()` (e.g., `inx_adc_board_read_channel()`)
-- **Types**: `inx_<module>_<name>_t` (e.g., `inx_adc_board_dev_t`)
+- **Header Guards**: `INX_<DEVICE>_H` (e.g., `INX_MCP3204_H`)
+- **Macros**: `INX_<DEVICE>_<CONSTANT>` (e.g., `INX_MCP3204_VREF_3300MV`)
+- **Functions**: `inx_<device>_<action>()` (e.g., `inx_mcp3204_read_raw()`)
+- **Types**: `inx_<device>_<name>_t` (e.g., `inx_mcp3204_dev_t`)
 
 ### Arduino
-- **Classes**: PascalCase (e.g., `AdcBoard`, `InxLinBoard`)
-- **Methods**: camelCase (e.g., `readSingleEnded()`)
+- **Classes**: PascalCase (e.g., `InxMcp3204`, `InxMcp2003b`)
+- **Methods**: camelCase (e.g., `readRaw()`, `beginMaster()`)
 
 ### Documentation
 - **Primary README files**: `README.md` (uppercase)
-- **Alternative capitalization**: `Readme.md` (used in Arduino libs)
+- **Alternative capitalization**: `Readme.md` (used by the Arduino libraries)
 
 ## Key Features
 
-✅ **Vendor-Agnostic Design**
-- Hardware Abstraction Layer (HAL) ensures drivers work across MCU vendors
-- Add new vendor support by implementing HAL interfaces
+✅ **STM32 MCU Support**
+- MCP3204 ADC and MCP2003B LIN middleware drivers use STM32 HAL peripherals
+- Nucleo-F446RE and Nucleo-L552ZE-Q sample projects are included
 
-✅ **Multiple Platform Support**
-- Native C/C++ for embedded systems
-- Arduino IDE integration for hobbyists
+✅ **Multiple Integration Paths**
+- STM32 C middleware and STM32CubeIDE sample projects
+- Arduino libraries with runnable sketches
 - MicroPython support planned
 
-✅ **Clean Architecture**
-- Public APIs separated from vendor-specific implementations
-- Driver logic completely independent of MCU vendor
-- Modular, extensible structure
+✅ **Consistent Device Naming**
+- MCU C APIs and Arduino classes use the MCP3204 and MCP2003B device names
+- Board projects and libraries follow the `inx_<module>_aob` naming convention
 
 ✅ **Examples & Samples**
 - Complete working examples for each board
@@ -120,40 +116,31 @@ This project uses **consistent, hierarchical naming** across all implementations
 
 Contributions welcome! When adding new add-on board or features:
 
-2. **Add board-level API** — New header in `include/`
-3. **Implement driver** — New source in `drivers/`
-4. **Create sample** — Add example in `samples/`
-5. **Document changes** — Update relevant README files
+1. **Add the implementation** in the appropriate platform-specific middleware.
+2. **Add a sample project** under `mcu-sdk/projects/` or an Arduino sketch under
+   `arduino-libs/<library>/examples/`.
+3. **Document changes** in the relevant README files.
 
 ## Architecture Overview
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│ Applications & Samples                                      │
-│ (MCU SDK samples, Arduino sketches, MicroPython scripts)    │
-└────────────────┬────────────────────────────────────────────┘
-                 │
-┌─────────────────┴────────────────────────────────────────────┐
-│ Board-Level Drivers (Vendor-Agnostic)                       │
-│ (adc_board.c, lin_board.c, canfd_board.c, etc.)            │
-└────────────────┬───────────────────────────────────────────┘
-                 │
-┌─────────────────┴────────────────────────────────────────────┐
-│ Hardware Abstraction Layer (HAL)                            │
-│ (hal_gpio.h, hal_uart.h, hal_spi.h, hal_i2c.h, etc.)      │
-└────────────────┬───────────────────────────────────────────┘
-                 │
-     ┌───────────┼───────────┬──────────────┐
-     │           │           │              │
-     ▼           ▼           ▼              ▼
-  STM32       NXP       Template      (Other Vendors)
-  (hal/       (hal/     (hal/          (hal/vendor/)
-   stm32/)     nxp/)     template/)
+MCU applications (STM32CubeIDE projects)
+                  |
+                  v
+STM32 middleware (MCP3204 ADC / MCP2003B LIN)
+                  |
+                  v
+STM32Cube HAL and CMSIS (vendored under mcu-sdk/drivers/)
+
+Arduino applications use the separate libraries in arduino-libs/.
+MicroPython support is planned and does not yet contain board drivers.
 ```
 
 ## License
 
-_See LICENSE file for details_
+This checkout has no repository-level license file. See the license files
+included with vendored dependencies and contact the project maintainer for
+licensing information about the SDK itself.
 
 ---
 
